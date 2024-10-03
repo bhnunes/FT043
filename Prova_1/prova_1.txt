@@ -1,0 +1,35 @@
+# Calculating the mean salary of the population
+mean_salary = data['salário (kR$)'].mean()
+mean_salary
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set the style for the plots
+sns.set(style="whitegrid")
+
+# Create a figure with subplots for histograms and box plots
+fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+
+# Histogram for men
+sns.histplot(data[data['gênero'] == 'homem']['salário (kR$)'], bins=30, kde=True, color='blue', ax=axes[0, 0])
+axes[0, 0].set_title('Histograma - Homens')
+
+# Histogram for women
+sns.histplot(data[data['gênero'] == 'mulher']['salário (kR$)'], bins=30, kde=True, color='pink', ax=axes[0, 1])
+axes[0, 1].set_title('Histograma - Mulheres')
+
+# Box plot for men
+sns.boxplot(x='gênero', y='salário (kR$)', data=data[data['gênero'] == 'homem'], ax=axes[1, 0], color='blue')
+axes[1, 0].set_title('Box-Plot - Homens')
+
+# Box plot for women
+sns.boxplot(x='gênero', y='salário (kR$)', data=data[data['gênero'] == 'mulher'], ax=axes[1, 1], color='pink')
+axes[1, 1].set_title('Box-Plot - Mulheres')
+
+# Adjust layout
+plt.tight_layout()
+
+# Display the plots
+plt.show()
