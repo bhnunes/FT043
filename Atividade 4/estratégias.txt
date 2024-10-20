@@ -1,0 +1,66 @@
+Para abordar a questão de verificar a eficácia da vacina, podemos adotar as seguintes estratégias:
+
+### (a) Box-plots dos dois conjuntos de dados
+
+1. **Visualização dos Dados:**
+   - Traçar box-plots para os dois conjuntos de dados: `M_controle` (grupo controle) e `M_tratamento` (grupo tratamento) em uma mesma figura, para comparar visualmente a distribuição da métrica de imunidade `M` entre os dois grupos.
+   - Os **box-plots** permitirão comparar a mediana, os quartis, a amplitude interquartil (IQR) e possíveis outliers. Isso ajuda a ter uma ideia inicial da diferença na imunidade entre quem tomou a vacina e quem não tomou.
+
+   **Passos para o gráfico:**
+   - Utilize bibliotecas como `matplotlib` ou `seaborn` para traçar os box-plots.
+   - O gráfico deve incluir rótulos adequados nos eixos e legenda que indique qual box-plot corresponde ao grupo controle e qual corresponde ao grupo tratamento.
+
+### (b) Teste de hipótese para a eficácia da vacina
+
+2. **Formulação da Hipótese:**
+   - O objetivo é testar se a vacina tem impacto positivo na métrica de imunidade `M`. Para isso, formulamos as hipóteses:
+     - **Hipótese Nula (H₀):** Não há diferença significativa na imunidade entre o grupo controle e o grupo tratamento. Ou seja, a vacina não tem efeito. \( H_0: \mu_{controle} = \mu_{tratamento} \)
+     - **Hipótese Alternativa (H₁):** O grupo que tomou a vacina apresenta um aumento significativo na imunidade comparado ao grupo controle. \( H_1: \mu_{tratamento} > \mu_{controle} \)
+
+3. **Escolha do Teste Estatístico:**
+   - Como queremos comparar as médias de dois grupos, podemos usar um **teste t para amostras independentes** (também chamado de **teste t de Student**), assumindo que os dados seguem uma distribuição normal.
+   - Antes de aplicar o teste t, seria recomendável verificar se as distribuições são aproximadamente normais (com, por exemplo, o **teste de Shapiro-Wilk**) e se as variâncias dos dois grupos são semelhantes (com o **teste de Levene** ou **F-test**).
+   - Se as distribuições não forem normais ou se as variâncias forem muito diferentes, pode-se optar por um **teste não-paramétrico** como o **teste de Mann-Whitney**.
+
+4. **Aplicação do Teste de Hipótese:**
+   - Se o teste t para amostras independentes for adequado:
+     - Calcular o valor-p (**p-value**).
+     - Definir o nível de significância (geralmente \( \alpha = 0.05 \)).
+     - Se o valor-p for menor que o nível de significância, rejeitamos a hipótese nula, indicando que a vacina teve um impacto positivo na imunidade.
+
+5. **Discussão dos Resultados:**
+   - Caso a hipótese nula seja rejeitada, podemos concluir que a vacina é eficaz em aumentar a métrica de imunidade M.
+   - Caso contrário, não temos evidências suficientes para afirmar que a vacina teve efeito significativo.
+   
+### Exemplo de Código para (a) e (b):
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+
+# Dados fictícios
+M_controle = [dados_do_grupo_controle]
+M_tratamento = [dados_do_grupo_tratamento]
+
+# (a) Box-plot
+plt.figure(figsize=(10, 6))
+sns.boxplot(data=[M_controle, M_tratamento])
+plt.xticks([0, 1], ['Controle', 'Tratamento'])
+plt.ylabel('Métrica de Imunidade (M)')
+plt.title('Box-plots dos Grupos Controle e Tratamento')
+plt.show()
+
+# (b) Teste de hipótese (t-test para amostras independentes)
+stat, p_value = stats.ttest_ind(M_tratamento, M_controle, alternative='greater')
+
+# Exibir resultados
+alpha = 0.05
+if p_value < alpha:
+    print(f"p-valor = {p_value:.4f} -> Rejeitamos a hipótese nula. A vacina é eficaz.")
+else:
+    print(f"p-valor = {p_value:.4f} -> Não rejeitamos a hipótese nula. A vacina não é eficaz.")
+```
+
+### Conclusão
+Com esta abordagem, podemos tanto visualizar as distribuições de imunidade nos dois grupos (controle e tratamento) quanto testar estatisticamente se a vacina teve efeito significativo. O teste de hipótese nos ajudará a decidir se a vacina aumenta a imunidade de forma eficaz.
